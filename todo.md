@@ -13,5 +13,7 @@ https://developers.pipedrive.com/docs/api/v1/Deals#getDeals
 # BD
 * Consultar todos as transações ganhas que tem o campo "Sincronizado" diferente de "1".
 * Subir elas no bling e após isso alterar o campo "Sincronizado" para "1"
+* Acho q a ideia de alterar o campo "Sincronizado" não vai rolar, pq aparentemente não tem como alterar um campo customizado
+pela API do pipedrive (sadface). Então vou ver se da pra fazer isso alterando o "title"
 
 # Paginação

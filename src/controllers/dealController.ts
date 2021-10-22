@@ -1,11 +1,13 @@
+import 'dotenv/config'
 import { Request, Response } from 'express'
 import * as pipedrive from 'pipedrive'
+import { addDeals } from './blingProductController'
 
 // Configurações de busca
 // Filter 22: "Onde Sincronizado não é igual à 1"
 let opts = {
   "status" : "won",
-  "filterId" : "22"
+  "filterId" : process.env.CUSTOM_FILTER_ID
 }
 
 // Mapeando informações necessárias
@@ -25,9 +27,11 @@ export async function getNewDeals(req: Request, res: Response) {
     const api = new pipedrive.DealsApi()
     const deals = await api.getDeals(opts)
 
-  return res.json(deals.data)
-  // return res.json(deals.data.map(mapDeals))
+    addDeals()
+
+  // return res.json(deals.data)
+  return res.json(deals.data.map(mapDeals))
   } catch(err) {
-    console.log('Error: ', err);
+    console.log('getNewDeals() Error: ', err);
   }
 }
