@@ -1,7 +1,6 @@
 import 'dotenv/config'
-import { Request, Response } from 'express'
 import * as pipedrive from 'pipedrive'
-import { addDeals } from './blingProductController'
+import { addDeals } from '../controllers/blingProductController'
 
 // Configurações de busca
 // Filter 22: "Onde Sincronizado não é igual à 1"
@@ -14,6 +13,7 @@ let opts = {
 function mapDeals(deal : any) {
   return {
     id: deal.id,
+    title: deal.title,
     status: deal.status,
     won_time: deal.won_time,
     person_name: deal.person_name,
@@ -21,15 +21,20 @@ function mapDeals(deal : any) {
   }
 }
 
-export async function getNewDeals(req: Request, res: Response) {
+export async function getNewDeals() : Promise<NewDealsProps[] | any> {
   try {
     const api = new pipedrive.DealsApi()
     const deals = await api.getDeals(opts)
 
-    addDeals()
+    if(!deals) {
+      console.log('There is no deals to sync!');
+      
+    }
 
-  // return res.json(deals.data)
-  return res.json(deals.data.map(mapDeals))
+    
+    const mappedDeals : NewDealsProps = deals.data.map(mapDeals)
+    return mappedDeals
+
   } catch(err) {
     console.log('getNewDeals() Error: ', err);
   }
