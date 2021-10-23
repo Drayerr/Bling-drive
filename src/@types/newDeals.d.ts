@@ -1,5 +1,6 @@
 interface NewDealsProps {
   id: number
+  value: number
   title: string
   status: string
   won_time: string

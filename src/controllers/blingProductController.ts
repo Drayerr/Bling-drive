@@ -2,6 +2,7 @@ import 'dotenv/config'
 import axios from 'axios'
 import { getNewDeals } from '../services/getNewDeals'
 import { Request, Response } from 'express'
+import getBlingSummary from '../services/getBlingSummary'
 
 const URL = `https://bling.com.br/Api/v2/pedido/json/?apikey=${process.env.BLING_TOKEN}`
 
@@ -9,9 +10,6 @@ const URL = `https://bling.com.br/Api/v2/pedido/json/?apikey=${process.env.BLING
 // Implementar alteração no Pipedrive
 async function postDeal(xml: string) {
   try {
-    console.log('im here');
-    console.log('xml is:', xml);
-
     await axios.post(`${URL}&xml=${xml}`)
   } catch (err: any) {
     console.log('Error at postDeal()', err.response.statusText);
@@ -33,13 +31,13 @@ async function createXml(newDeal: NewDealsProps[]) {
     const xml = `
     <pedido>
       <cliente>
-        <nome> ${deal.person_name} </nome>
+        <nome>${deal.person_name}</nome>
       </cliente>
       <item>
         <codigo>3117</codigo>
-        <descricao> ${deal.title} </descricao>
-        <qtde> ${deal.products_count} </qtde>
-        <vlr_unit>  22  </vlr_unit>
+        <descricao>${deal.title}</descricao>
+        <qtde>${deal.products_count}</qtde>
+        <vlr_unit>${deal.value}</vlr_unit>
       </item>
     </pedido>
 `
@@ -51,6 +49,7 @@ export async function addDeals(req: Request, res: Response) {
   try {
     getNewDeals().then(async (response) => {
       await createXml(response)
+      // await getBlingSummary()
       return res.json(response)
     })
   } catch (err) {

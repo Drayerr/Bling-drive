@@ -16,6 +16,7 @@ function mapDeals(deal : any) {
 
   return {
     id: deal.id,
+    value: deal.value,
     title: title,
     status: deal.status,
     won_time: deal.won_time,
@@ -31,9 +32,7 @@ export async function getNewDeals() : Promise<NewDealsProps[] | any> {
 
     if(!deals) {
       console.log('There is no deals to sync!');
-
     }
-
 
     const mappedDeals : NewDealsProps = deals.data.map(mapDeals)
     return mappedDeals
