@@ -11,9 +11,12 @@ let opts = {
 
 // Mapeando informações necessárias
 function mapDeals(deal : any) {
+  // Removendo a palavra "negócio" por que o bling não aceita acento.
+  const title = deal.title.split(' ').filter((p : any) => p != 'Negócio').join(' ')
+
   return {
     id: deal.id,
-    title: deal.title,
+    title: title,
     status: deal.status,
     won_time: deal.won_time,
     person_name: deal.person_name,
@@ -28,10 +31,10 @@ export async function getNewDeals() : Promise<NewDealsProps[] | any> {
 
     if(!deals) {
       console.log('There is no deals to sync!');
-      
+
     }
 
-    
+
     const mappedDeals : NewDealsProps = deals.data.map(mapDeals)
     return mappedDeals
 

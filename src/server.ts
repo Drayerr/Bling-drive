@@ -1,7 +1,10 @@
 import 'dotenv/config'
 import express from 'express'
 import routes from './routes'
+import mongoose from 'mongoose'
 import { ApiClient } from 'pipedrive'
+
+mongoose.connect(`mongodb+srv://admin:${process.env.MONGO_USER_KEY}@cluster0.43hhf.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`)
 
 const PORT = process.env.PORT || 3333
 

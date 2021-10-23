@@ -1,14 +1,17 @@
 import 'dotenv/config'
 import axios from 'axios'
-import { getNewDeals } from '../services/getNewDeal'
+import { getNewDeals } from '../services/getNewDeals'
 import { Request, Response } from 'express'
 
 const URL = `https://bling.com.br/Api/v2/pedido/json/?apikey=${process.env.BLING_TOKEN}`
 
-// Funçao para enviar dados ao Bling
+// Função para enviar dados ao Bling
 // Implementar alteração no Pipedrive
 async function postDeal(xml: string) {
   try {
+    console.log('im here');
+    console.log('xml is:', xml);
+
     await axios.post(`${URL}&xml=${xml}`)
   } catch (err: any) {
     console.log('Error at postDeal()', err.response.statusText);
@@ -16,12 +19,14 @@ async function postDeal(xml: string) {
 }
 
 // Função para converter as deals em xml e enviar para o bling.
-// Aparentemente ele não aceita enviar nomes com acento
+// Se tiver um produto com mesmo nome de cliente e mesma descrição, ele recusa.
+// Não pode ter acento
 async function createXml(newDeal: NewDealsProps[]) {
-  for (let i = 0; i > newDeal.length; i++) {
+  for (let i = 0; i < newDeal.length; i++) {
+
     const deal = newDeal[i]
 
-    if(!deal.person_name || !deal.title || !deal.products_count) {
+    if(!deal.person_name || !deal.title) {
       console.log('Error at createXml');
     }
 
@@ -45,9 +50,8 @@ async function createXml(newDeal: NewDealsProps[]) {
 export async function addDeals(req: Request, res: Response) {
   try {
     getNewDeals().then(async (response) => {
-      createXml(response)
+      await createXml(response)
       return res.json(response)
-
     })
   } catch (err) {
     console.log('upDeals() Error: ', err);
