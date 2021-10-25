@@ -2,7 +2,6 @@ import 'dotenv/config'
 import axios from 'axios'
 import { getNewDeals } from '../services/getNewDeals'
 import { Request, Response } from 'express'
-import getBlingSummary from '../services/getBlingSummary'
 
 const URL = `https://bling.com.br/Api/v2/pedido/json/?apikey=${process.env.BLING_TOKEN}`
 
@@ -24,7 +23,7 @@ async function createXml(newDeal: NewDealsProps[]) {
 
     const deal = newDeal[i]
 
-    if(!deal.person_name || !deal.title) {
+    if (!deal.person_name || !deal.title) {
       console.log('Error at createXml');
     }
 
@@ -49,8 +48,9 @@ export async function addDeals(req: Request, res: Response) {
   try {
     getNewDeals().then(async (response) => {
       await createXml(response)
-      // await getBlingSummary()
-      return res.json(response)
+
+      console.log('Successfully synchronized to Bling!');
+      return res.json({ msg: "Successfully synchronized to Bling!" })
     })
   } catch (err) {
     console.log('upDeals() Error: ', err);

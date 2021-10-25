@@ -1,18 +1,17 @@
 import 'dotenv/config'
 import * as pipedrive from 'pipedrive'
-import { addDeals } from '../controllers/blingProductController'
 
 // Configurações de busca
 // Filter 22: "Onde Sincronizado não é igual à 1"
 let opts = {
-  "status" : "won",
-  "filterId" : process.env.CUSTOM_FILTER_ID
+  "status": "won",
+  "filterId": process.env.CUSTOM_FILTER_ID
 }
 
 // Mapeando informações necessárias
-function mapDeals(deal : any) {
+function mapDeals(deal: any) {
   // Removendo a palavra "negócio" por que o bling não aceita acento.
-  const title = deal.title.split(' ').filter((p : any) => p != 'Negócio').join(' ')
+  const title = deal.title.split(' ').filter((p: any) => p != 'Negócio').join(' ')
 
   return {
     id: deal.id,
@@ -25,19 +24,19 @@ function mapDeals(deal : any) {
   }
 }
 
-export async function getNewDeals() : Promise<NewDealsProps[] | any> {
+export async function getNewDeals(): Promise<NewDealsProps[] | any> {
   try {
     const api = new pipedrive.DealsApi()
     const deals = await api.getDeals(opts)
 
-    if(!deals) {
+    if (!deals) {
       console.log('There is no deals to sync!');
     }
 
-    const mappedDeals : NewDealsProps = deals.data.map(mapDeals)
-    return mappedDeals
+    const mappedDeals: NewDealsProps = deals.data.map(mapDeals)
 
-  } catch(err) {
+    return mappedDeals
+  } catch (err) {
     console.log('getNewDeals() Error: ', err);
   }
 }

@@ -4,7 +4,8 @@ import forcePostMongo from './controllers/mongoProductsController'
 
 const routes = express.Router()
 
+// Rota para sincronizar dados com o Bling
 routes.get('/', addDeals)
-routes.post('/mongo', forcePostMongo)
+routes.post('/products', forcePostMongo)
 
 export default routes

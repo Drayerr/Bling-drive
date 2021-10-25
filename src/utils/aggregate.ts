@@ -1,8 +1,9 @@
+import todayIs from "./today"
+
 export default function aggregate(data: any) {
   try {
     // Pegando data do dia para comparar com o que será buscado
-    let date = new Date()
-    const today = date.toISOString().split('T')[0]
+    const today = todayIs()
 
     const filteredData = data.data.retorno.pedidos
 

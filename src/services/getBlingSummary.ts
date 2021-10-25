@@ -11,8 +11,6 @@ export default async function getBlingSummary(): Promise<dayTotalProps | undefin
 
     const daySummary = aggregate(data)
 
-    console.log(daySummary);
-
     return daySummary
   } catch (err: any) {
     console.log('Error at getBlingSummary(): ', err.response.statusText);
